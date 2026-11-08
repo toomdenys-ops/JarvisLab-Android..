@@ -49,6 +49,14 @@ jobs:
           bash libs/llama.kt/scripts/bootstrap.sh
           bash libs/llama.kt/scripts/build-opencl.sh
 
+      - name: Corrigir Qwen para ARM64
+        shell: bash
+        run: |
+          CMAKE="libs/llama.kt/llama-kt/src/main/cpp/CMakeLists.txt"
+          test -f "$CMAKE" || exit 1
+          sed -i 's/-march=armv8.2-a+dotprod/-march=armv8-a/g' "$CMAKE"
+          grep -n -- '-march=armv8-a' "$CMAKE"
+          
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
