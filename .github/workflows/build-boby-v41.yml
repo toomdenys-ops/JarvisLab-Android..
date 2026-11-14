@@ -1,0 +1,121 @@
+name: BOBY V4.1 • Rosto interativo e controles visíveis | Gemma3 + Qwen + DeepSeek
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build-boby-v41.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    name: Compilar APK V4.1
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Baixar repositorio
+        uses: actions/checkout@v4
+
+      - name: Extrair projeto BOBY V4.1
+        shell: bash
+        run: |
+          test -f BobyLab_Autonomo_V4_1_Rosto_Interativo.zip.b64 || { echo 'Coloque o arquivo codificado do projeto Boby V4.1 na raiz do repositório.'; exit 1; }
+          base64 --decode BobyLab_Autonomo_V4_1_Rosto_Interativo.zip.b64 > BobyLab_Autonomo_V4_1_Rosto_Interativo.zip
+          unzip -oq BobyLab_Autonomo_V4_1_Rosto_Interativo.zip -d .
+          test -f app/src/main/java/br/com/jarvislab/autonomo/Gemma3WorkerService.kt
+          test -f app/src/main/java/br/com/jarvislab/autonomo/QwenWorkerService.kt
+          grep -q 'version "2.2.20"' build.gradle.kts
+          grep -q 'litertlm-android:0.16.1' app/build.gradle.kts
+          grep -q 'sendMessage(prompt).toString().trim()' app/src/main/java/br/com/jarvislab/autonomo/Gemma3WorkerService.kt
+          ! grep -q 'gemma4.gguf' app/src/main/java/br/com/jarvislab/autonomo/MainActivity.kt
+          grep -q 'applicationId = "br.com.jarvislab.autonomo.v37"' app/build.gradle.kts
+          grep -q 'Boby 4.0' app/src/main/assets/index.html
+          grep -q 'const native=window.JarvisAndroid||null' app/src/main/assets/index.html
+          grep -q 'window.jarvisNative=function(json)' app/src/main/assets/index.html
+          grep -q 'SYSTEM_ALERT_WINDOW' app/src/main/AndroidManifest.xml
+          test -f app/src/main/java/br/com/jarvislab/autonomo/BobyCapsuleService.kt
+          grep -q 'android:label="Boby"' app/src/main/AndroidManifest.xml
+          grep -q 'versionName = "4.1-boby-interactive"' app/build.gradle.kts
+          test -f app/src/main/res/drawable/ic_boby.xml
+          test -f app/src/main/res/drawable/ic_mic_capsule.xml
+          grep -q 'capsuleToggle' app/src/main/assets/index.html
+          grep -Fq 'body[data-boby-state="happy"]' app/src/main/assets/index.html
+          grep -q 'bottom:calc(34px + env(safe-area-inset-bottom))' app/src/main/assets/index.html
+          grep -q 'bottom:calc(104px + env(safe-area-inset-bottom))' app/src/main/assets/index.html
+          grep -q 'selecionarVozTts' app/src/main/java/br/com/jarvislab/autonomo/MainActivity.kt
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
+
+      - name: Instalar NDK e ferramentas com tentativas de rede
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          for attempt in 1 2 3; do
+            if sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.2.12479018' 'cmake;3.22.1'; then break; fi
+            if [ "$attempt" -eq 3 ]; then exit 1; fi
+            sleep 15
+          done
+          sudo apt-get -o Acquire::Retries=3 update -qq
+          sudo apt-get -o Acquire::Retries=3 install -y -qq ninja-build glslang-tools glslc python3
+          command -v glslc
+
+      - name: Preparar llama.kt Qwen em ARMv8 basico
+        shell: bash
+        run: |
+          mkdir -p libs
+          git clone --depth 1 https://github.com/tensai-app/llama.kt.git libs/llama.kt
+          git -C libs/llama.kt submodule update --init --recursive
+          bash libs/llama.kt/scripts/bootstrap.sh
+          bash libs/llama.kt/scripts/build-opencl.sh
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          cmake = Path('libs/llama.kt/llama-kt/src/main/cpp/CMakeLists.txt')
+          source = cmake.read_text()
+          old = '-march=armv8.2-a+dotprod'
+          if source.count(old) != 1:
+              raise SystemExit(f'Configuracao ARM inesperada: {source.count(old)}')
+          cmake.write_text(source.replace(old, '-march=armv8-a'))
+          gradle = Path('libs/llama.kt/llama-kt/build.gradle.kts')
+          source = gradle.read_text()
+          old = 'plugins { id("com.android.library") }'
+          new = '''plugins {
+              id("com.android.library")
+              id("org.jetbrains.kotlin.android")
+          }'''
+          if old in source:
+              gradle.write_text(source.replace(old, new, 1))
+          elif 'id("org.jetbrains.kotlin.android")' not in source:
+              raise SystemExit('Atualizacao no llama.kt: conferir plugin Kotlin')
+          PYCODE
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Compilar Boby V4.1
+        shell: bash
+        run: gradle --no-daemon --max-workers=2 :app:assembleDebug
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: '2'
+
+      - name: Disponibilizar APK V4.1
+        uses: actions/upload-artifact@v4
+        with:
+          name: BobyLab-V4.1-Rosto-Interativo-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
