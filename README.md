@@ -10,7 +10,7 @@ O app conserva o mesmo identificador Android para atualizar por cima das versõe
 
 ### Compilar
 
-O projeto V4.0 está no arquivo `BobyLab_Autonomo_V4_0_Interface_Techi.zip.b64`. Acesse **Actions → BOBY V4.0 • Interface da referência → Run workflow**. No fim, baixe o artefato **BobyLab-V4.0-Interface-Boby-APK** e instale o APK no Android.
+O projeto V4.0 está no arquivo `BobyLab_Autonomo_V4_0_Interface_Techi_FINAL.zip.b64`. Acesse **Actions → BOBY V4.0 • Interface da referência → Run workflow [build-boby-v40-final.yml]**. No fim, baixe o artefato **BobyLab-V4.0-Interface-Boby-APK** e instale o APK no Android.
 
 ## Versões anteriores
 
