@@ -1,29 +1,19 @@
 # BOBY LAB para Android
 
-Aplicativo Android com inteligência artificial, voz e automações. A V3.9 mantém o painel circular aprovado, atualiza a cápsula flutuante com visual inspirado no Techi e muda o nome visível para **Boby**.
+Aplicativo Android com IA, voz, memória, automações e ferramentas locais. A V4.0 atualiza a interface para seguir a referência do Techi enviada pelo usuário e corrige a inicialização da ponte entre a tela e o Android.
 
-## Versões mantidas
+## Boby V4.0 — interface da referência
 
-| Versão | Projeto | Compilação |
-| --- | --- | --- |
-| **V3.9 — Boby com cápsula flutuante** (atual) | Arquivo Base64: BobyLab_Autonomo_V3_9_Capsula_Techi.zip.b64 | [Workflow BOBY V3.9](.github/workflows/build-boby-v39.yml) |
-| **V3.8 — Jarvis com cápsula flutuante** | [ZIP do projeto](JarvisLab_Autonomo_V3_8_Capsula_Flutuante.zip) | [Workflow V3.8](.github/workflows/build-jarvis-v38.yml) |
+A tela inicial agora abre no Chat com fundo preto, rosto azul com olhos e sorriso, quatro indicadores de bateria/temperatura/memória/armazenamento, abas Chat/Telefone/Enfoque/Agenda/Ajustes, bolhas de conversa, sugestões e barra de mensagem com microfone e envio azuis. A cápsula flutuante também foi redesenhada com o rosto do Boby.
 
-## BOBY V3.9
+O app conserva o mesmo identificador Android para atualizar por cima das versões Boby/Jarvis anteriores e manter os dados locais. Algumas respostas básicas funcionam sem modelo; perguntas abertas precisam de um modelo local instalado ou da chave da DeepSeek.
 
-A V3.9 renomeia a marca visível para Boby, troca o ícone da cápsula por microfone e deixa o controle compacto para abrir conversa por voz sobre outros aplicativos. Gemma 3, Qwen, DeepSeek, memória, voz e painel circular continuam no app. O identificador Android foi mantido para preservar os dados e permitir a atualização sobre a V3.8.
+### Compilar
 
-O arquivo do projeto está em Base64 porque a integração do GitHub só grava arquivos de texto; o workflow o decodifica automaticamente. Para compilar, abra **Actions → BOBY V3.9 Cápsula Flutuante → Run workflow**. Ao concluir, baixe **BobyLab-V3.9-Capsula-Flutuante-APK**.
+O projeto V4.0 está no arquivo `BobyLab_Autonomo_V4_0_Interface_Techi.zip.b64`. Acesse **Actions → BOBY V4.0 • Interface da referência → Run workflow**. No fim, baixe o artefato **BobyLab-V4.0-Interface-Boby-APK** e instale o APK no Android.
 
-## Cápsula flutuante
+## Versões anteriores
 
-Abra **Configurações → Ativar cápsula**. Na primeira vez, autorize o Boby a aparecer sobre outros aplicativos. Arraste a cápsula para mudar sua posição; toque no microfone para abrir a conversa por voz.
-
-## Voz
-
-Nas configurações, escolha uma voz em português instalada no Android, toque em **Testar voz selecionada** e depois em **Usar esta voz**. O Android não informa o gênero de cada voz, então escolha pela amostra.
-
-## Organização
-
-- Os projetos V3.8 e V3.9 e seus workflows ficam no repositório.
-- Versões mais antigas permanecem recuperáveis pelo histórico do GitHub.
+- V3.9: cápsula flutuante com o nome Boby.
+- V3.8: projeto Jarvis com cápsula flutuante.
+- Versões anteriores permanecem no histórico do GitHub.
