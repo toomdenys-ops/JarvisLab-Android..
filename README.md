@@ -1,32 +1,29 @@
-# JARVIS LAB para Android
+# BOBY LAB para Android
 
-Aplicativo Android do JARVIS LAB com inteligência artificial, voz e automações.
+Aplicativo Android com inteligência artificial, voz e automações. A V3.9 mantém o painel circular aprovado, atualiza a cápsula flutuante com visual inspirado no Techi e muda o nome visível para **Boby**.
 
 ## Versões mantidas
 
-Este repositório mantém somente as duas versões mais recentes do projeto:
-
-| Versão | Projeto | Workflow |
+| Versão | Projeto | Compilação |
 | --- | --- | --- |
-| **V3.8 — Cápsula flutuante** (atual) | [ZIP do projeto](JarvisLab_Autonomo_V3_8_Capsula_Flutuante.zip) | [Compilar V3.8](.github/workflows/build-jarvis-v38.yml) |
-| **V3.7 — Interface aprovada** | [ZIP do projeto](JarvisLab_Autonomo_V3_7_Interface_Aprovada.zip) | [Compilar V3.7](.github/workflows/build-jarvis-v37.yml) |
+| **V3.9 — Boby com cápsula flutuante** (atual) | Arquivo Base64: BobyLab_Autonomo_V3_9_Capsula_Techi.zip.b64 | [Workflow BOBY V3.9](.github/workflows/build-boby-v39.yml) |
+| **V3.8 — Jarvis com cápsula flutuante** | [ZIP do projeto](JarvisLab_Autonomo_V3_8_Capsula_Flutuante.zip) | [Workflow V3.8](.github/workflows/build-jarvis-v38.yml) |
 
-## V3.8
+## BOBY V3.9
 
-A V3.8 adiciona a cápsula flutuante do Jarvis e mantém a seleção de voz nas configurações do Android. O APK é compilado pelo GitHub Actions; quando a execução terminar, baixe o artefato **JarvisLab-V3.8-Capsula-Flutuante-APK**.
+A V3.9 renomeia a marca visível para Boby, troca o ícone da cápsula por microfone e deixa o controle compacto para abrir conversa por voz sobre outros aplicativos. Gemma 3, Qwen, DeepSeek, memória, voz e painel circular continuam no app. O identificador Android foi mantido para preservar os dados e permitir a atualização sobre a V3.8.
 
-Para compilar, abra **Actions → JARVIS V3.8 Cápsula Flutuante → Run workflow**.
+O arquivo do projeto está em Base64 porque a integração do GitHub só grava arquivos de texto; o workflow o decodifica automaticamente. Para compilar, abra **Actions → BOBY V3.9 Cápsula Flutuante → Run workflow**. Ao concluir, baixe **BobyLab-V3.9-Capsula-Flutuante-APK**.
 
-## Voz masculina
+## Cápsula flutuante
 
-Nas configurações do app, escolha uma voz em português instalada no Android, toque em **Testar voz selecionada** e depois em **Usar esta voz** para salvar. O Android não informa o gênero de cada voz, então escolha pela amostra. A preferência fica salva neste aplicativo.
+Abra **Configurações → Ativar cápsula**. Na primeira vez, autorize o Boby a aparecer sobre outros aplicativos. Arraste a cápsula para mudar sua posição; toque no microfone para abrir a conversa por voz.
 
-## Build V3.7
+## Voz
 
-A compilação da V3.7 terminou com sucesso em 13 de novembro de 2026. [Abrir execução e baixar o APK](https://github.com/toomdenys-ops/JarvisLab-Android../actions/runs/43538384609). O artefato fica disponível por 14 dias.
+Nas configurações, escolha uma voz em português instalada no Android, toque em **Testar voz selecionada** e depois em **Usar esta voz**. O Android não informa o gênero de cada voz, então escolha pela amostra.
 
 ## Organização
 
-- Os ZIPs das versões V3.7 e V3.8 ficam na raiz porque os workflows usam esses caminhos.
-- Os workflows mantidos ficam na pasta .github/workflows.
-- Versões anteriores podem ser recuperadas pelo histórico do GitHub.
+- Os projetos V3.8 e V3.9 e seus workflows ficam no repositório.
+- Versões mais antigas permanecem recuperáveis pelo histórico do GitHub.
